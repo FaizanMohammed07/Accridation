@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useToast } from '../../contexts/ToastContext';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, LogIn, Shield } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../contexts/ToastContext";
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ function Login() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -29,15 +29,16 @@ function Login() {
 
     try {
       const result = await login(formData.email, formData.password);
-      
+
       if (result.success) {
-        showSuccess('Login successful!');
-        navigate('/dashboard');
+        showSuccess("Login successful!");
+        navigate("/dashboard");
+        console.log("Navigating to /dashboard");
       } else {
         showError(result.message);
       }
     } catch (error) {
-      showError('Login failed. Please try again.');
+      showError("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -60,10 +61,16 @@ function Login() {
         </div>
 
         {/* Login Form */}
-        <form className="mt-8 space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100" onSubmit={handleSubmit}>
+        <form
+          className="mt-8 space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -79,7 +86,10 @@ function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -145,12 +155,22 @@ function Login() {
 
         {/* Demo Accounts */}
         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Demo Accounts:</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-2">
+            Demo Accounts:
+          </h3>
           <div className="text-xs text-gray-600 space-y-1">
-            <div><strong>Admin:</strong> admin@accreditech.com / admin123</div>
-            <div><strong>Institute:</strong> institute@test.com / institute123</div>
-            <div><strong>Reviewer:</strong> reviewer@test.com / reviewer123</div>
-            <div><strong>Auditor:</strong> auditor@test.com / auditor123</div>
+            <div>
+              <strong>Admin:</strong> admin@accreditech.com / admin123
+            </div>
+            <div>
+              <strong>Institute:</strong> institute@test.com / institute123
+            </div>
+            <div>
+              <strong>Reviewer:</strong> reviewer@test.com / reviewer123
+            </div>
+            <div>
+              <strong>Auditor:</strong> auditor@test.com / auditor123
+            </div>
           </div>
         </div>
       </div>

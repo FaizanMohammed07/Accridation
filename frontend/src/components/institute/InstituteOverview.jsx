@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Upload, 
-  FileText, 
-  Clock, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import {
+  Upload,
+  FileText,
+  Clock,
+  CheckCircle,
   AlertCircle,
   TrendingUp,
-  Calendar
-} from 'lucide-react';
-import { documentAPI } from '../../services/api';
-import { useToast } from '../../contexts/ToastContext';
-import { useAuth } from '../../contexts/AuthContext';
+  Calendar,
+} from "lucide-react";
+import { documentAPI } from "../../services/api";
+import { useToast } from "../../contexts/ToastContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function InstituteOverview() {
   const [documents, setDocuments] = useState([]);
@@ -28,18 +28,18 @@ function InstituteOverview() {
       const response = await documentAPI.getDocuments();
       const docs = response.data.documents || [];
       setDocuments(docs);
-      
+
       // Calculate stats
       const statsData = {
         total: docs.length,
-        pending: docs.filter(doc => doc.status === 'pending').length,
-        inReview: docs.filter(doc => doc.status === 'under_review').length,
-        approved: docs.filter(doc => doc.status === 'approved').length,
-        rejected: docs.filter(doc => doc.status === 'rejected').length,
+        pending: docs.filter((doc) => doc.status === "pending").length,
+        inReview: docs.filter((doc) => doc.status === "under_review").length,
+        approved: docs.filter((doc) => doc.status === "approved").length,
+        rejected: docs.filter((doc) => doc.status === "rejected").length,
       };
       setStats(statsData);
     } catch (error) {
-      showError('Failed to load dashboard data');
+      showError("Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
@@ -55,56 +55,59 @@ function InstituteOverview() {
 
   const statusCards = [
     {
-      name: 'Total Documents',
+      name: "Total Documents",
       value: stats.total || 0,
       icon: FileText,
-      color: 'bg-blue-500',
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-700'
+      color: "bg-blue-500",
+      bgColor: "bg-blue-50",
+      textColor: "text-blue-700",
     },
     {
-      name: 'Pending Review',
+      name: "Pending Review",
       value: stats.pending || 0,
       icon: Clock,
-      color: 'bg-yellow-500',
-      bgColor: 'bg-yellow-50',
-      textColor: 'text-yellow-700'
+      color: "bg-yellow-500",
+      bgColor: "bg-yellow-50",
+      textColor: "text-yellow-700",
     },
     {
-      name: 'In Review',
+      name: "In Review",
       value: stats.inReview || 0,
       icon: AlertCircle,
-      color: 'bg-orange-500',
-      bgColor: 'bg-orange-50',
-      textColor: 'text-orange-700'
+      color: "bg-orange-500",
+      bgColor: "bg-orange-50",
+      textColor: "text-orange-700",
     },
     {
-      name: 'Approved',
+      name: "Approved",
       value: stats.approved || 0,
       icon: CheckCircle,
-      color: 'bg-green-500',
-      bgColor: 'bg-green-50',
-      textColor: 'text-green-700'
+      color: "bg-green-500",
+      bgColor: "bg-green-50",
+      textColor: "text-green-700",
     },
   ];
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      under_review: 'bg-blue-100 text-blue-800',
-      approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      under_audit: 'bg-purple-100 text-purple-800',
+      pending: "bg-yellow-100 text-yellow-800",
+      under_review: "bg-blue-100 text-blue-800",
+      approved: "bg-green-100 text-green-800",
+      rejected: "bg-red-100 text-red-800",
+      under_audit: "bg-purple-100 text-purple-800",
     };
-    return badges[status] || 'bg-gray-100 text-gray-800';
+    return badges[status] || "bg-gray-100 text-gray-800";
   };
 
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Welcome back, {user?.name}
+        </h1>
         <p className="mt-2 text-gray-600">
-          Manage your accreditation documents and track their progress through the review process.
+          Manage your accreditation documents and track their progress through
+          the review process.
         </p>
       </div>
 
@@ -117,7 +120,9 @@ function InstituteOverview() {
           >
             <div className="flex items-center">
               <div className={`${stat.bgColor} p-3 rounded-lg`}>
-                <stat.icon className={`h-6 w-6 ${stat.color.replace('bg-', 'text-')}`} />
+                <stat.icon
+                  className={`h-6 w-6 ${stat.color.replace("bg-", "text-")}`}
+                />
               </div>
             </div>
             <div className="mt-4">
@@ -137,7 +142,9 @@ function InstituteOverview() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <FileText className="h-5 w-5 text-blue-600 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900">Recent Documents</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Recent Documents
+                </h3>
               </div>
               <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                 View All
@@ -147,15 +154,24 @@ function InstituteOverview() {
           <div className="p-6">
             <div className="space-y-4">
               {documents.slice(0, 5).map((doc) => (
-                <div key={doc._id} className="flex items-center justify-between">
+                <div
+                  key={doc._id}
+                  className="flex items-center justify-between"
+                >
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{doc.title}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {doc.title}
+                    </p>
                     <p className="text-xs text-gray-500 mt-1">
                       {new Date(doc.createdAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusBadge(doc.status)}`}>
-                    {doc.status.replace('_', ' ')}
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusBadge(
+                      doc.status
+                    )}`}
+                  >
+                    {doc.status.replace("_", " ")}
                   </span>
                 </div>
               ))}
@@ -173,7 +189,9 @@ function InstituteOverview() {
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center">
               <TrendingUp className="h-5 w-5 text-green-600 mr-2" />
-              <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Quick Actions
+              </h3>
             </div>
           </div>
           <div className="p-6">
@@ -198,14 +216,18 @@ function InstituteOverview() {
       {/* Progress Overview */}
       <div className="mt-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Accreditation Progress</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Accreditation Progress
+          </h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Documents Submitted</span>
-              <span className="text-sm font-medium text-blue-600">{stats.total}/10 Required</span>
+              <span className="text-sm font-medium text-blue-600">
+                {stats.total}/10 Required
+              </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
+              <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${Math.min((stats.total / 10) * 100, 100)}%` }}
               ></div>

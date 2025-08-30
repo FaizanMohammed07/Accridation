@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  FileText, 
-  Clock, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import {
+  FileText,
+  Clock,
+  CheckCircle,
   AlertCircle,
   Shield,
   Calendar,
   TrendingUp,
-  Award
-} from 'lucide-react';
-import { auditAPI, documentAPI } from '../../services/api';
-import { useToast } from '../../contexts/ToastContext';
-import { useAuth } from '../../contexts/AuthContext';
+  Award,
+} from "lucide-react";
+import { auditAPI, documentAPI } from "../../services/api";
+import { useToast } from "../../contexts/ToastContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function AuditorOverview() {
   const [dashboardData, setDashboardData] = useState({});
@@ -28,13 +28,13 @@ function AuditorOverview() {
     try {
       const [dashboardResponse, documentsResponse] = await Promise.all([
         auditAPI.getDashboard(),
-        documentAPI.getAssignedDocuments()
+        documentAPI.getAssignedDocuments(),
       ]);
-      
+
       setDashboardData(dashboardResponse.data);
       setAssignedDocuments(documentsResponse.data.documents || []);
     } catch (error) {
-      showError('Failed to load dashboard data');
+      showError("Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
@@ -50,65 +50,70 @@ function AuditorOverview() {
 
   const stats = [
     {
-      name: 'Assigned Audits',
+      name: "Assigned Audits",
       value: assignedDocuments.length || 0,
       icon: FileText,
-      color: 'bg-blue-500',
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-700'
+      color: "bg-blue-500",
+      bgColor: "bg-blue-50",
+      textColor: "text-blue-700",
     },
     {
-      name: 'Pending Audits',
-      value: assignedDocuments.filter(doc => doc.auditStatus === 'pending').length || 0,
+      name: "Pending Audits",
+      value:
+        assignedDocuments.filter((doc) => doc.auditStatus === "pending")
+          .length || 0,
       icon: Clock,
-      color: 'bg-yellow-500',
-      bgColor: 'bg-yellow-50',
-      textColor: 'text-yellow-700'
+      color: "bg-yellow-500",
+      bgColor: "bg-yellow-50",
+      textColor: "text-yellow-700",
     },
     {
-      name: 'Completed Audits',
+      name: "Completed Audits",
       value: dashboardData.completedAudits || 0,
       icon: CheckCircle,
-      color: 'bg-green-500',
-      bgColor: 'bg-green-50',
-      textColor: 'text-green-700'
+      color: "bg-green-500",
+      bgColor: "bg-green-50",
+      textColor: "text-green-700",
     },
     {
-      name: 'Compliance Rate',
+      name: "Compliance Rate",
       value: `${dashboardData.complianceRate || 0}%`,
       icon: Award,
-      color: 'bg-purple-500',
-      bgColor: 'bg-purple-50',
-      textColor: 'text-purple-700'
+      color: "bg-purple-500",
+      bgColor: "bg-purple-50",
+      textColor: "text-purple-700",
     },
   ];
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      in_progress: 'bg-blue-100 text-blue-800',
-      completed: 'bg-green-100 text-green-800',
-      overdue: 'bg-red-100 text-red-800',
+      pending: "bg-yellow-100 text-yellow-800",
+      in_progress: "bg-blue-100 text-blue-800",
+      completed: "bg-green-100 text-green-800",
+      overdue: "bg-red-100 text-red-800",
     };
-    return badges[status] || 'bg-gray-100 text-gray-800';
+    return badges[status] || "bg-gray-100 text-gray-800";
   };
 
   const getSeverityBadge = (severity) => {
     const badges = {
-      critical: 'bg-red-100 text-red-800',
-      high: 'bg-orange-100 text-orange-800',
-      medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-green-100 text-green-800',
+      critical: "bg-red-100 text-red-800",
+      high: "bg-orange-100 text-orange-800",
+      medium: "bg-yellow-100 text-yellow-800",
+      low: "bg-green-100 text-green-800",
     };
-    return badges[severity] || 'bg-gray-100 text-gray-800';
+    return badges[severity] || "bg-gray-100 text-gray-800";
   };
 
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Welcome back, {user?.name}
+        </h1>
         <p className="mt-2 text-gray-600">
-          Conduct final audits and provide accreditation decisions for educational institutions.
+          Conduct final audits and provide accreditation decisions for
+          educational institutions.
         </p>
       </div>
 
@@ -121,7 +126,9 @@ function AuditorOverview() {
           >
             <div className="flex items-center">
               <div className={`${stat.bgColor} p-3 rounded-lg`}>
-                <stat.icon className={`h-6 w-6 ${stat.color.replace('bg-', 'text-')}`} />
+                <stat.icon
+                  className={`h-6 w-6 ${stat.color.replace("bg-", "text-")}`}
+                />
               </div>
             </div>
             <div className="mt-4">
@@ -141,7 +148,9 @@ function AuditorOverview() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Shield className="h-5 w-5 text-blue-600 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900">Recent Audit Assignments</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Recent Audit Assignments
+                </h3>
               </div>
               <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                 View All
@@ -151,22 +160,39 @@ function AuditorOverview() {
           <div className="p-6">
             <div className="space-y-4">
               {assignedDocuments.slice(0, 5).map((doc) => (
-                <div key={doc._id} className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+                <div
+                  key={doc._id}
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow"
+                >
                   <div className="flex items-start justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-900">{doc.title}</h4>
+                    <h4 className="text-sm font-medium text-gray-900">
+                      {doc.title}
+                    </h4>
                     <div className="flex space-x-2">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${getSeverityBadge(doc.severity || 'medium')}`}>
-                        {doc.severity || 'Medium'}
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${getSeverityBadge(
+                          doc.severity || "medium"
+                        )}`}
+                      >
+                        {doc.severity || "Medium"}
                       </span>
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusBadge(doc.auditStatus || 'pending')}`}>
-                        {doc.auditStatus?.replace('_', ' ') || 'Pending'}
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusBadge(
+                          doc.auditStatus || "pending"
+                        )}`}
+                      >
+                        {doc.auditStatus?.replace("_", " ") || "Pending"}
                       </span>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 mb-2">{doc.institute?.name}</p>
+                  <p className="text-xs text-gray-500 mb-2">
+                    {doc.institute?.name}
+                  </p>
                   <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>Assigned: {new Date(doc.assignedAt).toLocaleDateString()}</span>
-                    <span>Review Score: {doc.reviewScore || 'N/A'}</span>
+                    <span>
+                      Assigned: {new Date(doc.assignedAt).toLocaleDateString()}
+                    </span>
+                    <span>Review Score: {doc.reviewScore || "N/A"}</span>
                   </div>
                 </div>
               ))}
@@ -184,31 +210,39 @@ function AuditorOverview() {
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center">
               <TrendingUp className="h-5 w-5 text-green-600 mr-2" />
-              <h3 className="text-lg font-semibold text-gray-900">Audit Performance</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Audit Performance
+              </h3>
             </div>
           </div>
           <div className="p-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Audits Completed This Month</span>
+                <span className="text-sm text-gray-600">
+                  Audits Completed This Month
+                </span>
                 <span className="text-sm font-medium text-blue-600">
                   {dashboardData.monthlyAudits || 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Average Audit Time</span>
+                <span className="text-sm text-gray-600">
+                  Average Audit Time
+                </span>
                 <span className="text-sm font-medium text-green-600">
-                  {dashboardData.avgAuditTime || '0'} days
+                  {dashboardData.avgAuditTime || "0"} days
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Accuracy Rating</span>
                 <span className="text-sm font-medium text-purple-600">
-                  {dashboardData.accuracyRating || '0.0'}%
+                  {dashboardData.accuracyRating || "0.0"}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Findings Identified</span>
+                <span className="text-sm text-gray-600">
+                  Findings Identified
+                </span>
                 <span className="text-sm font-medium text-orange-600">
                   {dashboardData.findingsIdentified || 0}
                 </span>
@@ -231,17 +265,28 @@ function AuditorOverview() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
-              <h3 className="text-lg font-semibold text-gray-900">Critical Issues Requiring Attention</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Critical Issues Requiring Attention
+              </h3>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {assignedDocuments
-              .filter(doc => doc.severity === 'critical' || doc.priority === 'high')
+              .filter(
+                (doc) => doc.severity === "critical" || doc.priority === "high"
+              )
               .slice(0, 3)
               .map((doc) => (
-                <div key={doc._id} className="border border-red-200 rounded-lg p-4 bg-red-50">
-                  <h4 className="font-medium text-gray-900 mb-2">{doc.title}</h4>
-                  <p className="text-sm text-gray-600 mb-2">{doc.institute?.name}</p>
+                <div
+                  key={doc._id}
+                  className="border border-red-200 rounded-lg p-4 bg-red-50"
+                >
+                  <h4 className="font-medium text-gray-900 mb-2">
+                    {doc.title}
+                  </h4>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {doc.institute?.name}
+                  </p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">
                       Assigned: {new Date(doc.assignedAt).toLocaleDateString()}
@@ -252,7 +297,9 @@ function AuditorOverview() {
                   </div>
                 </div>
               ))}
-            {assignedDocuments.filter(doc => doc.severity === 'critical' || doc.priority === 'high').length === 0 && (
+            {assignedDocuments.filter(
+              (doc) => doc.severity === "critical" || doc.priority === "high"
+            ).length === 0 && (
               <p className="text-gray-500 text-sm col-span-full text-center py-4">
                 No critical issues at this time
               </p>
@@ -264,7 +311,9 @@ function AuditorOverview() {
       {/* Compliance Overview */}
       <div className="mt-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance Overview</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Compliance Overview
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <div className="flex items-center justify-between">
