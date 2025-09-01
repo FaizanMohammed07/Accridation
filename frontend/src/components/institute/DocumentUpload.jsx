@@ -4,8 +4,8 @@ import {
   DocumentTextIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import axios from "axios";
 import toast from "react-hot-toast";
+import { documentAPI } from "../../services/api";
 
 function DocumentUpload() {
   const [formData, setFormData] = useState({
@@ -26,7 +26,6 @@ function DocumentUpload() {
 
   const handleFileSelect = (file) => {
     if (file) {
-      // Validate file type
       const allowedTypes = [
         "application/pdf",
         "application/msword",
@@ -36,18 +35,13 @@ function DocumentUpload() {
       ];
 
       if (!allowedTypes.includes(file.type)) {
-        toast.error(
-          "Please select a valid document file (PDF, DOC, DOCX, XLS, XLSX)"
-        );
+        toast.error("Invalid file type (PDF, DOC, DOCX, XLS, XLSX only)");
         return;
       }
-
-      // Validate file size (10MB limit)
       if (file.size > 10 * 1024 * 1024) {
         toast.error("File size must be less than 10MB");
         return;
       }
-
       setSelectedFile(file);
     }
   };
@@ -91,11 +85,7 @@ function DocumentUpload() {
       uploadData.append("category", formData.category);
       uploadData.append("tags", formData.tags);
 
-      await axios.post("/api/documents/upload", uploadData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await documentAPI.upload(uploadData);
 
       toast.success("Document uploaded successfully");
 
@@ -109,15 +99,14 @@ function DocumentUpload() {
       });
       setSelectedFile(null);
     } catch (error) {
+      console.error("Upload error:", error);
       toast.error(error.response?.data?.message || "Upload failed");
     } finally {
       setUploading(false);
     }
   };
 
-  const removeFile = () => {
-    setSelectedFile(null);
-  };
+  const removeFile = () => setSelectedFile(null);
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return "0 Bytes";
@@ -137,12 +126,11 @@ function DocumentUpload() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Document Information */}
+        {/* --- Document Info --- */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-lg font-medium text-gray-900 mb-4">
             Document Information
           </h2>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -158,7 +146,6 @@ function DocumentUpload() {
                 placeholder="Enter document title"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Type *
@@ -212,7 +199,6 @@ function DocumentUpload() {
                 <option value="supplementary">Supplementary</option>
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Tags
@@ -229,7 +215,7 @@ function DocumentUpload() {
           </div>
         </div>
 
-        {/* File Upload */}
+        {/* --- File Upload --- */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-lg font-medium text-gray-900 mb-4">
             File Upload
@@ -293,7 +279,7 @@ function DocumentUpload() {
           )}
         </div>
 
-        {/* Submit Button */}
+        {/* --- Submit Button --- */}
         <div className="flex justify-end">
           <button
             type="submit"

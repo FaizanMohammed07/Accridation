@@ -43,6 +43,7 @@ function ProtectedRoute({ children, requiredRole }) {
 
 function DashboardRouter() {
   const { user } = useAuth();
+  console.log("Current user:", user);
 
   if (!user) return <Navigate to="/login" replace />;
 

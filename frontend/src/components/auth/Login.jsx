@@ -13,6 +13,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
+  const { setUser } = useAuth();
   const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
 
@@ -32,8 +33,8 @@ function Login() {
 
       if (result.success) {
         showSuccess("Login successful!");
+        setUser(result.user);
         navigate("/dashboard");
-        console.log("Navigating to /dashboard");
       } else {
         showError(result.message);
       }

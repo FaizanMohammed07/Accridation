@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { authAPI } from "../services/api";
 
 const AuthContext = createContext();
 
@@ -17,14 +17,14 @@ export function AuthProvider({ children }) {
 
   const checkAuthStatus = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
       if (token) {
         const response = await authAPI.getProfile();
         setUser(response.data.user);
       }
     } catch (error) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     } finally {
       setLoading(false);
     }
@@ -33,17 +33,22 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const response = await authAPI.login({ email, password });
-      const { user, accessToken, refreshToken } = response.data;
-      
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+
+      const { user, accessToken, refreshToken } = response.data.data;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       setUser(user);
-      
-      return { success: true };
+
+      console.log("Login response:", user);
+      return { user, success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Login failed' 
+      console.error("Login error:", error.response || error);
+
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || error.message || "Login failed",
       };
     }
   };
@@ -51,11 +56,11 @@ export function AuthProvider({ children }) {
   const register = async (userData) => {
     try {
       const response = await authAPI.register(userData);
-      return { success: true, message: 'Registration successful' };
+      return { success: true, message: "Registration successful" };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Registration failed' 
+      return {
+        success: false,
+        message: error.response?.data?.message || "Registration failed",
       };
     }
   };
@@ -64,10 +69,10 @@ export function AuthProvider({ children }) {
     try {
       await authAPI.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       setUser(null);
     }
   };
@@ -78,26 +83,23 @@ export function AuthProvider({ children }) {
       setUser(response.data.user);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Profile update failed' 
+      return {
+        success: false,
+        message: error.response?.data?.message || "Profile update failed",
       };
     }
   };
 
   const value = {
     user,
+    setUser,
     loading,
     login,
     register,
     logout,
     updateProfile,
-    checkAuthStatus
+    checkAuthStatus,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
